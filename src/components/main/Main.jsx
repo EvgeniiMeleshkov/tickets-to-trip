@@ -28,6 +28,9 @@ export const Main = () => {
         new Date('7/4/2013 21:50:00 UTC'),
         new Date('7/4/2013 21:55:00 UTC'),
     ]
+    //
+    // const localizeScheduleTo = scheduleTo.map(el => el.toTimeString())
+    // const localizeScheduleFrom = scheduleFrom.map(el => el.toTimeString())
 
     let date = new Date('7/4/2013 4:52:48 UTC');
     console.log(((addHours(1, date)) - date.getTime()))
@@ -96,7 +99,8 @@ export const Main = () => {
 
     const tripBack = (value) => {
         const selected = value.target.value
-        setFrom(selected)
+        const date = new Date(selected)
+        setFrom(date)
         if (from === null) {
             setTrip({...trip, backTime: null})
             setError("Выберите время отправления")
@@ -109,7 +113,8 @@ export const Main = () => {
 
     const tripTo = (value) => {
         const selected = value.target.value
-        setTo(selected)
+        const date = new Date(selected)
+        setTo(date)
         if (to === null) {
             setTrip({...trip, toTime: null})
             setError("Выберите время отправления")
@@ -158,7 +163,7 @@ export const Main = () => {
             {!submit &&
                 <div className={s.container}>
                     <div className={s.error}>{error}</div>
-                    <div className={s.directionBlock}>
+                    <div className={s.directionBlockSelect}>
                         <select className={s.select} onChange={choseDirection}>
                             <option value='Выбери направление'>Выбери направление</option>
                             <option value="из A в B">из A в B</option>
@@ -176,10 +181,10 @@ export const Main = () => {
                             <div className={s.pickATimeBlock}>
                                 <div>
                                     {trip.direction !== 'из B в A' &&
-                                        <select value={to.toTimeString()} className={s.select} onChange={tripTo}>
+                                        <select value={to.toString()} className={s.select} onChange={tripTo}>
                                             {scheduleTo.map((el, idx) => {
                                                 return (
-                                                    <option key={idx} value={el.toTimeString()}>{el.toTimeString()} (из
+                                                    <option key={idx} value={el.toString()}>{el.toLocaleTimeString()} (из
                                                         A в B)</option>
                                                 )
                                             })}
@@ -188,10 +193,10 @@ export const Main = () => {
                                 </div>
                                 <div>
                                     {trip.direction !== 'из A в B' &&
-                                        <select value={from.toTimeString()} className={s.select} onChange={tripBack}>
+                                        <select value={from.toString()} className={s.select} onChange={tripBack}>
                                             {scheduleFrom.map((el, idx) => {
                                                 return (
-                                                    <option key={idx} value={el.toTimeString()}>{el.toTimeString()} (из
+                                                    <option key={idx} value={el.toString()}>{el.toLocaleTimeString()} (из
                                                         B в A)</option>
                                                 )
 
@@ -218,14 +223,15 @@ export const Main = () => {
             {submit &&
                 <div>
                     <div>
-                        <button onClick={back}>Назад</button>
+                        <span className={s.submit} onClick={back}>Назад</span>
                     </div>
-                    <div>
-                        <p>Вы выбрали <b>{trip.ticketsAmount}</b> билета по маршруту</p>
-                        <p><b>{trip.direction}</b> стоимостью 4000р.</p>
-                        <p>Это путешествие займет у вас 40 минут.</p>
-                        <p>Теплоход отправляется в 12-00,</p>
-                        <p>а прибудет в 18-00.</p>
+                    <div className={s.info}>
+                        <div className={s.infoRow}><p>Количество билетов: (<b>{trip.ticketsAmount}</b>).</p></div>
+                        <div className={s.infoRow}><p>По маршруту: <b>{trip.direction}</b></p></div>
+                        <div className={s.infoRow}><p>Cтоимостью: <b>{1000 * trip.ticketsAmount}р.</b></p></div>
+                        <div className={s.infoRow}><p>Это путешествие займет у вас <b>45</b> минут.</p></div>
+                        <div className={s.infoRow}><p>Отправление: <b>{trip.toTime.toLocaleDateString()}</b> в <b>{trip.toTime.toLocaleTimeString()}</b>,</p></div>
+                        <div className={s.infoRow}><p>Прибытие: <b>{addHours(1, trip.toTime).toLocaleDateString()}</b> в <b>{addHours(1, trip.toTime).toLocaleTimeString()}</b>.</p></div>
                     </div>
                 </div>
             }
