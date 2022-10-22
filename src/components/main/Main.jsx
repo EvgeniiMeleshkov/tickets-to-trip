@@ -1,26 +1,39 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import s from './Main.module.scss'
 
 export const Main = () => {
 
+
+    function addHours(numOfH, date = new Date()) {
+        const newDate = new Date(date.getTime() + numOfH * 60 * 60 * 1000)
+
+        return newDate;
+    }
+
+
     const scheduleTo = [
-        "18:00",
-        "18:30",
-        "18:45",
-        "19:00",
-        "19:15",
-        "21:00"
+        new Date('7/4/2013 18:00:00 UTC'),
+        new Date('7/4/2013 18:30:00 UTC'),
+        new Date('7/4/2013 18:45:00 UTC'),
+        new Date('7/4/2013 19:00:00 UTC'),
+        new Date('7/4/2013 19:15:00 UTC'),
+        new Date('7/4/2013 21:00:00 UTC')
     ]
     const scheduleFrom = [
-        "18:30",
-        "18:45",
-        "19:00",
-        "19:15",
-        "19:35",
-        "21:50",
-        "21:55"
+        new Date('7/4/2013 18:30:00 UTC'),
+        new Date('7/4/2013 18:45:00 UTC'),
+        new Date('7/4/2013 19:00:00 UTC'),
+        new Date('7/4/2013 19:15:00 UTC'),
+        new Date('7/4/2013 19:35:00 UTC'),
+        new Date('7/4/2013 21:50:00 UTC'),
+        new Date('7/4/2013 21:55:00 UTC'),
     ]
 
+    let date = new Date('7/4/2013 4:52:48 UTC');
+    console.log(((addHours(1, date)) - date.getTime()))
+
+    console.log(addHours(1, date).toTimeString())
+    console.log(date.toTimeString())
 
     const [error, setError] = useState(null)
     const [submit, setSubmit] = useState(false)
@@ -36,7 +49,7 @@ export const Main = () => {
 
     const onNumOfPaxChangeHandler = (value) => {
         const val = value.currentTarget.value
-        if(val > 0) {
+        if (val > 0) {
             setTrip({...trip, ticketsAmount: val})
             setError(null)
         }
@@ -46,20 +59,36 @@ export const Main = () => {
 
     const choseDirection = (value) => {
         const selected = value.target.value
-        setTrip({...trip, backTime: '', ticketsAmount: '', toTime: ''})
+        setTrip({...trip, backTime: null, ticketsAmount: '', toTime: null})
 
         if (selected === 'Выбери направление') {
-            setTrip({...trip, direction: '', toTime: '', backTime: '', ticketsAmount: ''})
+            setTrip({...trip, direction: '', toTime: null, backTime: null, ticketsAmount: ''})
             return
         }
         if (selected === 'из A в B и обратно в А') {
-            setTrip({...trip, direction: selected, toTime: scheduleTo[0], backTime: scheduleFrom[0], ticketsAmount: ''})
+            setTrip({
+                ...trip,
+                direction: selected,
+                toTime: scheduleTo[0],
+                backTime: scheduleFrom[0],
+                ticketsAmount: ''
+            })
         }
-        if(selected === 'из A в B'){
-            setTrip({...trip, direction: selected, toTime: scheduleTo[0], backTime: ''})
+        if (selected === 'из A в B') {
+            setTrip({
+                ...trip,
+                direction: selected,
+                toTime: scheduleTo[0],
+                backTime: null
+            })
         }
-        if(selected === 'из B в A'){
-            setTrip({...trip, direction: selected, toTime: '', backTime: scheduleFrom[0]})
+        if (selected === 'из B в A') {
+            setTrip({
+                ...trip,
+                direction: selected,
+                toTime: null,
+                backTime: scheduleFrom[0]
+            })
         }
 
     }
@@ -68,8 +97,8 @@ export const Main = () => {
     const tripBack = (value) => {
         const selected = value.target.value
         setFrom(selected)
-        if (from === '') {
-            setTrip({...trip, backTime: ''})
+        if (from === null) {
+            setTrip({...trip, backTime: null})
             setError("Выберите время отправления")
             return
         }
@@ -81,8 +110,8 @@ export const Main = () => {
     const tripTo = (value) => {
         const selected = value.target.value
         setTo(selected)
-        if (selected === '') {
-            setTrip({...trip, toTime: ''})
+        if (to === null) {
+            setTrip({...trip, toTime: null})
             setError("Выберите время отправления")
             return
         }
@@ -94,22 +123,35 @@ export const Main = () => {
         if (error) {
             return;
         }
-        if(trip.ticketsAmount <= 0) {
+        if (trip.ticketsAmount <= 0) {
             setError('Укажите количество билетов')
             return;
         }
-            setSubmit(true)
-            setError(null)
+        setSubmit(true)
+        setError(null)
 
         //Logic to interpolate result:
         console.log({...trip})
+
     }
 
 
     const back = () => {
         setSubmit(false)
-        setTrip({...trip, backTime: '', toTime: '', ticketsAmount: '', direction: ''})
+        setTrip({...trip, backTime: null, toTime: null, ticketsAmount: '', direction: ''})
     }
+
+    useEffect(() => {
+        if(trip.direction === 'из A в B и обратно в А') {
+            const toTime = new Date(to).getTime()
+            const fromTime = new Date(from).getTime()
+            const res = fromTime - toTime
+            console.log(res)
+            if (res <= 3600000) {
+                setError('Вы не успеете на обратный рейс')
+            }
+        }
+    }, [trip.direction, to, from])
 
     return (
         <div>
@@ -134,10 +176,11 @@ export const Main = () => {
                             <div className={s.pickATimeBlock}>
                                 <div>
                                     {trip.direction !== 'из B в A' &&
-                                        <select value={to} className={s.select} onChange={tripTo}>
+                                        <select value={to.toTimeString()} className={s.select} onChange={tripTo}>
                                             {scheduleTo.map((el, idx) => {
                                                 return (
-                                                    <option key={idx} value={el}>{el} (из A в B)</option>
+                                                    <option key={idx} value={el.toTimeString()}>{el.toTimeString()} (из
+                                                        A в B)</option>
                                                 )
                                             })}
                                         </select>
@@ -145,10 +188,11 @@ export const Main = () => {
                                 </div>
                                 <div>
                                     {trip.direction !== 'из A в B' &&
-                                        <select value={from} className={s.select} onChange={tripBack}>
+                                        <select value={from.toTimeString()} className={s.select} onChange={tripBack}>
                                             {scheduleFrom.map((el, idx) => {
                                                 return (
-                                                    <option key={idx} value={el}>{el} (из B в A)</option>
+                                                    <option key={idx} value={el.toTimeString()}>{el.toTimeString()} (из
+                                                        B в A)</option>
                                                 )
 
                                             })}
