@@ -13,12 +13,6 @@ $button-color: #c3ad1b;
   width: 70vw;
 }
 
-.error {
-  position: absolute;
-  top: 20px;
-  color: rgba($error-color, 0.72);
-}
-
 .info {
   display: flex;
   flex-direction: column;
@@ -40,6 +34,12 @@ $button-color: #c3ad1b;
   justify-content: space-evenly;
   align-content: center;
 
+  .error {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    color: rgba(220, 20, 60, 0.72);
+  }
   .select {
     background: transparent;
     border: none;

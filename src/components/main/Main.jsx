@@ -163,7 +163,7 @@ export const Main = () => {
             {!submit &&
                 <div className={s.container}>
                     <div className={s.error}>{error}</div>
-                    <div className={s.directionBlockSelect}>
+                    <div>
                         <select className={s.select} onChange={choseDirection}>
                             <option value='Выбери направление'>Выбери направление</option>
                             <option value="из A в B">из A в B</option>
