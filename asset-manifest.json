@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tickets-to-trip/static/css/main.bbb68c29.css",
-    "main.js": "/tickets-to-trip/static/js/main.93174dc6.js",
+    "main.css": "/tickets-to-trip/static/css/main.67db5263.css",
+    "main.js": "/tickets-to-trip/static/js/main.c08f11e3.js",
     "index.html": "/tickets-to-trip/index.html",
-    "main.bbb68c29.css.map": "/tickets-to-trip/static/css/main.bbb68c29.css.map",
-    "main.93174dc6.js.map": "/tickets-to-trip/static/js/main.93174dc6.js.map"
+    "main.67db5263.css.map": "/tickets-to-trip/static/css/main.67db5263.css.map",
+    "main.c08f11e3.js.map": "/tickets-to-trip/static/js/main.c08f11e3.js.map"
   },
   "entrypoints": [
-    "static/css/main.bbb68c29.css",
-    "static/js/main.93174dc6.js"
+    "static/css/main.67db5263.css",
+    "static/js/main.c08f11e3.js"
   ]
 }
