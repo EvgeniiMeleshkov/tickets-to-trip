@@ -226,12 +226,43 @@ export const Main = () => {
                         <span className={s.submit} onClick={back}>Назад</span>
                     </div>
                     <div className={s.info}>
-                        <div className={s.infoRow}><p>Количество билетов: (<b>{trip.ticketsAmount}</b>).</p></div>
-                        <div className={s.infoRow}><p>По маршруту: <b>{trip.direction}</b></p></div>
-                        <div className={s.infoRow}><p>Cтоимостью: <b>{1000 * trip.ticketsAmount}р.</b></p></div>
-                        <div className={s.infoRow}><p>Это путешествие займет у вас <b>45</b> минут.</p></div>
-                        <div className={s.infoRow}><p>Отправление: <b>{trip.toTime.toLocaleDateString()}</b> в <b>{trip.toTime.toLocaleTimeString()}</b>,</p></div>
-                        <div className={s.infoRow}><p>Прибытие: <b>{addHours(1, trip.toTime).toLocaleDateString()}</b> в <b>{addHours(1, trip.toTime).toLocaleTimeString()}</b>.</p></div>
+                        <div className={s.infoRow}>
+                            <p>Количество билетов: (<b>{trip.ticketsAmount}</b>).</p>
+                        </div>
+                        <div className={s.infoRow}>
+                            <p>По маршруту: <b>{trip.direction}</b></p>
+                        </div>
+                        <div className={s.infoRow}>
+                            <p>Cтоимостью: <b>{1000 * trip.ticketsAmount}р.</b></p>
+                        </div>
+                        <div className={s.infoRow}>
+                            <p>Это путешествие займет у вас <b>45</b> минут.</p>
+                        </div>
+                        <div className={s.infoRow}>
+
+
+                            <p>Отправление: <b>{
+                                    trip.direction === 'из B в A' ?
+                                        trip.backTime.toLocaleDateString() : trip.toTime.toLocaleDateString()
+                            }</b>
+                                в <b>{
+                                    trip.direction === 'из B в A' ?
+                                    trip.backTime.toLocaleTimeString() : trip.toTime.toLocaleTimeString()
+                                }</b>,</p>
+
+                        </div>
+                        <div className={s.infoRow}>
+                            <p>Прибытие: <b>{
+                                trip.direction === 'из B в A' ?
+                                addHours(1, trip.backTime).toLocaleDateString() :
+                                    addHours(1, trip.toTime).toLocaleDateString()
+                            }</b>
+                                в <b>{
+                                    trip.direction === 'из B в A' ?
+                                    addHours(1, trip.backTime).toLocaleTimeString() :
+                                        addHours(1, trip.toTime).toLocaleTimeString()
+                                }</b>.</p>
+                        </div>
                     </div>
                 </div>
             }
