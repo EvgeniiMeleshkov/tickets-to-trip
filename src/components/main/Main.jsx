@@ -104,7 +104,8 @@ export const Main = () => {
         }
             setSubmit(true)
             setError(null)
-        console.log(trip)
+
+        //Logic to interpolate result:
 
     }
 
