@@ -4,26 +4,25 @@ import s from './Main.module.scss'
 export const Main = () => {
 
     const scheduleTo = [
-        "18:00(из A в B)",
-        "18:30(из A в B)",
-        "18:45(из A в B)",
-        "19:00(из A в B)",
-        "19:15(из A в B)",
-        "21:00(из A в B)"
+        "18:00",
+        "18:30",
+        "18:45",
+        "19:00",
+        "19:15",
+        "21:00"
     ]
     const scheduleFrom = [
-        "18:30(из B в A)",
-        "18:45(из B в A)",
-        "19:00(из B в A)",
-        "19:15(из B в A)",
-        "19:35(из B в A)",
-        "21:50(из B в A)",
-        "21:55(из B в A)"
+        "18:30",
+        "18:45",
+        "19:00",
+        "19:15",
+        "19:35",
+        "21:50",
+        "21:55"
     ]
 
 
     const [error, setError] = useState(null)
-    const [isOneWay, setIsOneWay] = useState(true)
     const [submit, setSubmit] = useState(false)
     const [to, setTo] = useState(scheduleTo[0])
     const [from, setFrom] = useState(scheduleFrom[0])
@@ -54,15 +53,12 @@ export const Main = () => {
             return
         }
         if (selected === 'из A в B и обратно в А') {
-            setIsOneWay(false)
             setTrip({...trip, direction: selected, toTime: scheduleTo[0], backTime: scheduleFrom[0], ticketsAmount: ''})
         }
         if(selected === 'из A в B'){
-            setIsOneWay(true)
             setTrip({...trip, direction: selected, toTime: scheduleTo[0], backTime: ''})
         }
         if(selected === 'из B в A'){
-            setIsOneWay(true)
             setTrip({...trip, direction: selected, toTime: '', backTime: scheduleFrom[0]})
         }
 
@@ -106,7 +102,7 @@ export const Main = () => {
             setError(null)
 
         //Logic to interpolate result:
-
+        console.log({...trip})
     }
 
 
@@ -141,7 +137,7 @@ export const Main = () => {
                                         <select value={to} className={s.select} onChange={tripTo}>
                                             {scheduleTo.map((el, idx) => {
                                                 return (
-                                                    <option key={idx} value={el}>{el}</option>
+                                                    <option key={idx} value={el}>{el} (из A в B)</option>
                                                 )
                                             })}
                                         </select>
@@ -152,7 +148,7 @@ export const Main = () => {
                                         <select value={from} className={s.select} onChange={tripBack}>
                                             {scheduleFrom.map((el, idx) => {
                                                 return (
-                                                    <option key={idx} value={el}>{el}</option>
+                                                    <option key={idx} value={el}>{el} (из B в A)</option>
                                                 )
 
                                             })}
